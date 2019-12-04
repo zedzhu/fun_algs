@@ -38,6 +38,7 @@ char * reverse_sentence(char* s)
 			break;
 		begin += (end - begin); //begin指针后移到end
     }
+    return s;
 }
 
 //去除首尾空格，中间2个及以上空格合并成1个。
@@ -66,6 +67,7 @@ char * reverse_sentence_remove_spaces(char* s)
     }
     reverse(s, last-1); //note that the last pointer now point to ' ' or '\0'
     *last = '\0'; //add end mark for c-string
+    return s;
 }
 
 

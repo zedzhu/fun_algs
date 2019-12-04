@@ -69,7 +69,7 @@ char * reverse_sentence_remove_spaces(char* s)
         if (*p == '\0') break;
         *last++ = ' '; //add only one space after an word
     }
-    reverse(s, last-1);
+    reverse(s, last-1); //note that the last pointer now point to ' ' or '\0'
     *last = '\0'; //add end mark for c-string
 }
 

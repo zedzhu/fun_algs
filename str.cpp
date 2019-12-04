@@ -22,26 +22,21 @@ char * reverse_sentence(char* s)
     char* begin = s;
     char* end = s + strlen(s) - 1;
     char* myend = end;
-    reverse(begin, myend - 1);
-    begin = end = s;
-    while (begin < myend)
+    reverse(begin, myend - 1); //从头到倒数第2个（除去标点符号）先反转
+    while (begin < myend && *begin == ' ') //忽略开头的空格
+    	begin++;
+    end = begin;
+    while (end < myend)
     {
-        if (*begin == ' ')
-        {
-            begin++;
-            end++;
-            continue;
-        }
-
-        if (*end == ' ' || end == myend)
-        {
-            reverse(begin, end-1);
-            begin = end;
-        }
-        else
-        {
-            end++;
-        }
+    	//找到一个单词结尾
+		while (end < myend && *end != ' ')
+			end++;
+		reverse(begin, end-1); //反转这个单词
+		while (end < myend && *end == ' ') //找到下一个单词开头
+			end++;
+		if (end == myend)
+			break;
+		begin += (end - begin); //begin指针后移到end
     }
 }
 

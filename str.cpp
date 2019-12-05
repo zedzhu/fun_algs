@@ -23,19 +23,19 @@ char * reverse_sentence(char* s)
     char* end = s + strlen(s) - 1;
     reverse(begin, end - 1); //从头到倒数第2个（除去标点符号）先反转
     while (begin < end && *begin == ' ') //忽略开头的空格
-    	begin++;
+        begin++;
     char* p = begin;
     while (p < end)
     {
-    	//找到一个单词结尾
-		while (p < end && *p != ' ')
-			p++;
-		reverse(begin, p-1); //反转这个单词
-		while (p < end && *p == ' ') //找到下一个单词开头
-			p++;
-		if (p == end)
-			break;
-		begin += (p - begin); //begin指针后移到end
+        //找到一个单词结尾
+        while (p < end && *p != ' ')
+            p++;
+        reverse(begin, p-1); //反转这个单词
+        while (p < end && *p == ' ') //找到下一个单词开头
+            p++;
+        if (p == end)
+            break;
+        begin += (p - begin); //begin指针后移到end
     }
     return s;
 }

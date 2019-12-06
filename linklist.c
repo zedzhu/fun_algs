@@ -21,8 +21,8 @@ Node *reverseRecursive(Node *head)
     if (head == NULL || head->next == NULL)
         return head;
     Node* p =reverseRecursive(head->next);
-    head->next->next = head;
-    head->next = NULL;
+    head->next->next = head; //让下一个节点指向自己
+    head->next = NULL; //断开自己原来的下一个节点指向
     return p;
 }
 
@@ -30,7 +30,7 @@ Node *reverseRecursive(Node *head)
  *设置两个指针(fast, slow)，初始值都指向头，slow每次前进一步，fast每次前进二步，如果链表存在环，则fast必定先进入环，而slow后进入环，两个指针必定相遇
  *
  */
-int isCircle(Node *head)
+int hasCircle(Node *head)
 {
      Node *slow=head;
      Node *fast=head;

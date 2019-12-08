@@ -22,9 +22,10 @@ char * reverse_sentence(char* s)
     char* begin = s;
     char* end = s + strlen(s) - 1;
     reverse(begin, end - 1); //从头到倒数第2个（除去标点符号）先反转
-    while (begin < end && *begin == ' ') //忽略开头的空格
-        begin++;
-    char* p = begin;
+    char* p =s;
+    while (p < end && *p == ' ') //忽略开头的空格
+        p++;
+    begin = p;
     while (p < end)
     {
         //找到一个单词结尾

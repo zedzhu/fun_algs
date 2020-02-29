@@ -7,9 +7,7 @@ void reverse(char* begin, char* end)
 {
     while (begin < end)
     {
-        char c = *begin;
-        *begin = *end;
-        *end = c;
+        std::swap(*begin, *end);
         begin++;
         end--;
     }
@@ -21,14 +19,14 @@ char * reverse_sentence(char* s)
     if (!s) return NULL;
     char* begin = s;
     char* end = s + strlen(s) - 1;
-    reverse(begin, end - 1); //从头到倒数第2个（除去标点符号）先反转
-    char* p =s;
+    reverse(begin, end - 1); //从头到倒数第2个（除去标点符号）先反转；如果要求标点符号也要反转，则是用end。
+    char* p = s;
     while (p < end && *p == ' ') //忽略开头的空格
         p++;
     begin = p;
     while (p < end)
     {
-        //找到一个单词结尾
+        //找到一个单词结尾，如果要求最后标点符号也要反转，则是p<=end。
         while (p < end && *p != ' ')
             p++;
         reverse(begin, p-1); //反转这个单词
@@ -36,7 +34,7 @@ char * reverse_sentence(char* s)
             p++;
         if (p == end)
             break;
-        begin += (p - begin); //begin指针后移到end
+        begin = p; //begin指针后移到下一个单词开头
     }
     return s;
 }
@@ -45,7 +43,6 @@ char * reverse_sentence(char* s)
 char * reverse_sentence_remove_spaces(char* s)
 {
     if (!s) return NULL;
-    char* end = s + strlen(s) - 1;
     char* p = s;
     char* last = s;
     while (*p != '\0' && *p == ' ')
@@ -55,14 +52,14 @@ char * reverse_sentence_remove_spaces(char* s)
     {
         while (*p != '\0' && *p != ' ')
             p++; //find word end
-        reverse(begin, p-1); //reverse the word
+        reverse(begin, p-1); //reverse the word, p-1 points to the last of the word
         memmove(last, begin, p-begin); //move the word backward to remove spaces between words, considering overlap
         //strncpy(last, begin, p-begin); //unsafe for overlapping
         last += (p-begin);
         while (*p != '\0' && *p == ' ')
             p++; //find next word start
-        begin = p;
         if (*p == '\0') break;
+        begin = p;
         *last++ = ' '; //add only one space after an word
     }
     reverse(s, last-1); //note that the last pointer now point to ' ' or '\0'

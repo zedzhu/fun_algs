@@ -4,7 +4,7 @@ void reverseLinklist(Node* pHead)
 {
     Node* curr = pHead;
     Node* prev = NULL;
-    while (curr != NULL)
+    while (curr)
     {
         Node* tmp = curr->next;
         // Insert to head
@@ -20,7 +20,7 @@ Node *reverseRecursive(Node *head)
 {
     if (head == NULL || head->next == NULL)
         return head;
-    Node* p =reverseRecursive(head->next);
+    Node* p = reverseRecursive(head->next);
     head->next->next = head; //让下一个节点指向自己
     head->next = NULL; //断开自己原来的下一个节点指向
     return p;
@@ -34,7 +34,7 @@ int hasCircle(Node *head)
 {
      Node *slow=head;
      Node *fast=head;
-     while( fast && fast->next)
+     while (fast && fast->next)
      {
          slow = slow->next;
          fast = fast->next->next;

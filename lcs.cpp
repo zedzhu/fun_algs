@@ -1,11 +1,10 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<vector>
+#include<algorithm>
  
 using namespace std;
 
-int max(int a, int b);
- 
 /* A Naive recursive implementation of LCS problem */
 /* Returns length of LCS for X[0..m-1], Y[0..n-1] */
 int lcs( char *X, char *Y, int m, int n )
@@ -15,7 +14,7 @@ int lcs( char *X, char *Y, int m, int n )
    if (X[m-1] == Y[n-1])
      return 1 + lcs(X, Y, m-1, n-1);
    else
-     return max(lcs(X, Y, m, n-1), lcs(X, Y, m-1, n));
+     return std::max(lcs(X, Y, m, n-1), lcs(X, Y, m-1, n));
 }
 
 /* Dynamic Programming implementation of LCS problem */
@@ -28,16 +27,14 @@ int lcs_dp( char *X, char *Y, int m, int n )
   
    /* Following steps build L[m+1][n+1] in bottom up fashion. Note 
       that L[i][j] contains length of LCS of X[0..i-1] and Y[0..j-1] */
-   for (i=0; i<=m; i++)
+   for (i=1; i<=m; i++)
    {
-     for (j=0; j<=n; j++)
+     for (j=1; j<=n; j++)
      {
-       if (i == 0 || j == 0)
-         L[i][j] = 0;
-       else if (X[i-1] == Y[j-1])
+       if (X[i-1] == Y[j-1])
          L[i][j] = L[i-1][j-1] + 1;
        else
-         L[i][j] = max(L[i-1][j], L[i][j-1]);
+         L[i][j] = std::max(L[i-1][j], L[i][j-1]);
      }
    }
     

@@ -14,9 +14,9 @@ public:
     void pop();
 
 private:
-    std::deque<T> _data;
+    std::deque<T> _data; //用队列deque是因为deque支持按下标随机访问at函数，而stl::stack不支持
     std::deque<int> _min_index;
-}
+};
 
 template<typename T>
 T& StackWithMin<T>::top()
@@ -31,7 +31,7 @@ const T& StackWithMin<T>::top() const
 }
 
 template<typename T>
-const T& StackWithMin<T>::min()
+const T& StackWithMin<T>::min() const
 {
     return _data.at(_min_index.back());
 }

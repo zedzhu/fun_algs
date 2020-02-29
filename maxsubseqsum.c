@@ -1,4 +1,4 @@
-//Algorithm 1:Ê±¼äĞ§ÂÊÎªO(n*n*n)  
+//Algorithm 1:æ—¶é—´æ•ˆç‡ä¸ºO(n*n*n)  
 int MaxSubsequenceSum1(const int A[],int N)  
 {  
     int ThisSum=0 ,MaxSum=0,i,j,k;  
@@ -15,7 +15,7 @@ int MaxSubsequenceSum1(const int A[],int N)
         return MaxSum;  
 }  
   
-//Algorithm 2:Ê±¼äĞ§ÂÊÎªO(n*n)  
+//Algorithm 2:æ—¶é—´æ•ˆç‡ä¸ºO(n*n)  
 int MaxSubsequenceSum2(const int A[],int N)  
 {  
     int ThisSum=0,MaxSum=0,i,j,k;  
@@ -32,17 +32,17 @@ int MaxSubsequenceSum2(const int A[],int N)
     return MaxSum;  
 }  
   
-//Algorithm 3:Ê±¼äĞ§ÂÊÎªO(n*log n)  
-//Ëã·¨3µÄÖ÷ÒªË¼Ïë£º²ÉÓÃ¶ş·Ö²ßÂÔ£¬½«ĞòÁĞ·Ö³É×óÓÒÁ½·İ¡£  
-//ÄÇÃ´×î³¤×ÓĞòÁĞÓĞÈıÖÖ¿ÉÄÜ³öÏÖµÄÇé¿ö£¬¼´  
-//¡¾1¡¿Ö»³öÏÖÔÚ×ó²¿·Ö.  
-//¡¾2¡¿Ö»³öÏÖÔÚÓÒ²¿·Ö¡£  
-//¡¾3¡¿³öÏÖÔÚÖĞ¼ä£¬Í¬Ê±Éæ¼°µ½×óÓÒÁ½²¿·Ö¡£  
-//·ÖÇé¿öÌÖÂÛÖ®¡£  
+//Algorithm 3:æ—¶é—´æ•ˆç‡ä¸ºO(n*log n)  
+//ç®—æ³•3çš„ä¸»è¦æ€æƒ³ï¼šé‡‡ç”¨äºŒåˆ†ç­–ç•¥ï¼Œå°†åºåˆ—åˆ†æˆå·¦å³ä¸¤ä»½ã€‚  
+//é‚£ä¹ˆæœ€é•¿å­åºåˆ—æœ‰ä¸‰ç§å¯èƒ½å‡ºç°çš„æƒ…å†µï¼Œå³  
+//ã€1ã€‘åªå‡ºç°åœ¨å·¦éƒ¨åˆ†.  
+//ã€2ã€‘åªå‡ºç°åœ¨å³éƒ¨åˆ†ã€‚  
+//ã€3ã€‘å‡ºç°åœ¨ä¸­é—´ï¼ŒåŒæ—¶æ¶‰åŠåˆ°å·¦å³ä¸¤éƒ¨åˆ†ã€‚  
+//åˆ†æƒ…å†µè®¨è®ºä¹‹ã€‚  
 static int MaxSubSum(const int A[],int Left,int Right)  
 {  
-    int MaxLeftSum,MaxRightSum;              //×ó¡¢ÓÒ²¿·Ö×î´óÁ¬Ğø×ÓĞòÁĞÖµ¡£¶ÔÓ¦Çé¿ö¡¾1¡¿¡¢¡¾2¡¿  
-    int MaxLeftBorderSum,MaxRightBorderSum;  //´ÓÖĞ¼ä·Ö±ğµ½×óÓÒÁ½²àµÄ×î´óÁ¬Ğø×ÓĞòÁĞÖµ£¬¶ÔÓ¦case¡¾3¡¿¡£  
+    int MaxLeftSum,MaxRightSum;              //å·¦ã€å³éƒ¨åˆ†æœ€å¤§è¿ç»­å­åºåˆ—å€¼ã€‚å¯¹åº”æƒ…å†µã€1ã€‘ã€ã€2ã€‘  
+    int MaxLeftBorderSum,MaxRightBorderSum;  //ä»ä¸­é—´åˆ†åˆ«åˆ°å·¦å³ä¸¤ä¾§çš„æœ€å¤§è¿ç»­å­åºåˆ—å€¼ï¼Œå¯¹åº”caseã€3ã€‘ã€‚  
     int LeftBorderSum,RightBorderSum;  
     int Center,i;  
     if(Left == Right)Base Case  
@@ -74,11 +74,11 @@ static int MaxSubSum(const int A[],int Left,int Right)
         return max1>max2?max1:max2;  
 }  
   
-//Algorithm 4:Ê±¼äĞ§ÂÊÎªO(n)  
-//Í¬ÉÏÊöµÚÒ»½ÚÖĞµÄË¼Â·3¡¢ºÍ4¡£  
+//Algorithm 4:æ—¶é—´æ•ˆç‡ä¸ºO(n)  
+//åŒä¸Šè¿°ç¬¬ä¸€èŠ‚ä¸­çš„æ€è·¯3ã€å’Œ4ã€‚  
 int MaxSubsequenceSum(const int A[],int N)  
 {  
-    int thisSum = A[0], maxSum = 0;  
+    int thisSum = 0, maxSum = A[0];  
     for(int j=0;j<N;j++)
     {  
         thisSum+=A[j];  

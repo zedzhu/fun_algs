@@ -73,7 +73,7 @@ void multiply(long F[2][2], long M[2][2]) {
 }
 
 void power(long F[2][2], long n) {
-    if( n <= 1) return;
+    if (n <= 1) return;
     long M[2][2] = {{1,1},{1,0}};
 
     // n - 1 times multiply the matrix to {{1,0},{0,1}}
@@ -88,10 +88,10 @@ void power(long F[2][2], long n) {
 
 /* Optimized version of power() in method 4 */
 void power2(long F[2][2], int n) {
-    if( n <= 1) return;
+    if (n <= 1) return;
     power2(F, n/2);
     multiply(F, F);
-    if (n%2 != 0) {
+    if (n & 1) { //n是奇数
         long M[2][2] = {{1,1},{1,0}};
         multiply(F, M);
     }

@@ -14,8 +14,7 @@ ListNode* reverseLinklist(ListNode* pHead)
     while (curr)
     {
         ListNode* tmp = curr->next;
-        // Insert to head
-        curr->next = prev;
+        curr->next = prev; //Insert to head
         prev = curr;
         curr = tmp;
     }
@@ -25,7 +24,7 @@ ListNode* reverseLinklist(ListNode* pHead)
 
 ListNode *reverseRecursive(ListNode *head)
 {
-    if (head == NULL || head->next == NULL)
+    if (!head || !head->next)
         return head;
     ListNode* p = reverseRecursive(head->next);
     head->next->next = head; //让下一个节点指向自己

@@ -3,25 +3,20 @@
  */
 
 //T(n) = T(n-1) + T(n-2), O（(3/2)^N）
-long fib1(int n)
-{
+long fib1(int n) {
     if ( n <= 1 ) return n;
     return fib1(n-1) + fib1(n-2);
 }
 
 //Dynamic Programming, Time Complexity: O(n) Extra Space: O(n)
-long fib2(int n)
-{
+long fib2(int n) {
     /* Declare an array to store fibonacci numbers. */
     long* f = new long[n+1]();
-    int i;
-
     /* 0th and 1st number of the series are 0 and 1*/
     f[0] = 0;
     f[1] = 1;
 
-    for (i = 2; i <= n; i++)
-    {
+    for (int i = 2; i <= n; i++) {
         /* Add the previous 2 numbers in the series and store it */
         f[i] = f[i-1] + f[i-2];
     }
@@ -32,13 +27,11 @@ long fib2(int n)
 }
 
 //Space Otimized Method 2, Time Complexity: O(n) Extra Space: O(1)
-long fib3 (int n)
-{
+long fib3 (int n) {
     if ( n <= 1 ) return n;
 
     long x = 0, y = 1;
-    for (int j = 1; j <= n; j++)
-    {
+    for (int j = 1; j <= n; j++) {
         y = x + y;
         x = y - x;
     }
@@ -58,8 +51,7 @@ void multiply(long F[2][2], long M[2][2]);
    power function */
 void power(long F[2][2], int n);
 
-long fib4(int n)
-{
+long fib4(int n) {
     long F[2][2] = {{1,1},{1,0}};
     if(n == 0)
         return 0;
@@ -80,8 +72,7 @@ void multiply(long F[2][2], long M[2][2]) {
     F[1][1] = w;
 }
 
-void power(long F[2][2], long n)
-{
+void power(long F[2][2], long n) {
     if( n <= 1) return;
     long M[2][2] = {{1,1},{1,0}};
 
@@ -96,20 +87,17 @@ void power(long F[2][2], long n)
  */
 
 /* Optimized version of power() in method 4 */
-void power2(long F[2][2], int n)
-{
+void power2(long F[2][2], int n) {
     if( n <= 1) return;
     power2(F, n/2);
     multiply(F, F);
-    if (n%2 != 0)
-    {
+    if (n%2 != 0) {
         long M[2][2] = {{1,1},{1,0}};
         multiply(F, M);
     }
 }
 
-int fib5(int n)
-{
+int fib5(int n) {
     if ( n <= 1 ) return n;
     long F[2][2] = {{1,1},{1,0}};
     power2(F, n-1);

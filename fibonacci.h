@@ -98,7 +98,7 @@ void power(long F[2][2], long n)
  */
 
 /* Optimized version of power() in method 4 */
-void power2(int F[2][2], int n)
+void power2(long F[2][2], int n)
 {
     if( n <= 1) return;
     power2(F, n/2);

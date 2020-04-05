@@ -1,12 +1,19 @@
+#include <cstddef>
+
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
 
 //插表头法
-void reverseLinklist(Node* pHead)
+ListNode* reverseLinklist(ListNode* pHead)
 {
-    Node* curr = pHead;
-    Node* prev = NULL;
+    ListNode* curr = pHead;
+    ListNode* prev = NULL;
     while (curr)
     {
-        Node* tmp = curr->next;
+        ListNode* tmp = curr->next;
         // Insert to head
         curr->next = prev;
         prev = curr;
@@ -16,11 +23,11 @@ void reverseLinklist(Node* pHead)
     return prev;
 }
 
-Node *reverseRecursive(Node *head)
+ListNode *reverseRecursive(ListNode *head)
 {
     if (head == NULL || head->next == NULL)
         return head;
-    Node* p = reverseRecursive(head->next);
+    ListNode* p = reverseRecursive(head->next);
     head->next->next = head; //让下一个节点指向自己
     head->next = NULL; //断开自己原来的下一个节点指向
     return p;
@@ -30,10 +37,10 @@ Node *reverseRecursive(Node *head)
  *设置两个指针(fast, slow)，初始值都指向头，slow每次前进一步，fast每次前进二步，如果链表存在环，则fast必定先进入环，而slow后进入环，两个指针必定相遇
  *
  */
-int hasCircle(Node *head)
+int hasCircle(ListNode *head)
 {
-     Node *slow=head;
-     Node *fast=head;
+     ListNode *slow=head;
+     ListNode *fast=head;
      while (fast && fast->next)
      {
          slow = slow->next;

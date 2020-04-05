@@ -216,6 +216,4 @@ int greedyLeastCoins(const vector<int>& coins, int target) {
     }
 
     return ret;
-}
-
- 
+} 

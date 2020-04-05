@@ -28,14 +28,16 @@ public:
         return ret;
     }
 
+    //前序的一个应用就是计算表达式，前序遍历得到序列（保存到栈中）+/*23-21*3-41，再从右至左取数，直到取到操作符，就将刚才取
+    //到的2个数用该操作符计算，结果再回填至栈顶。直到栈中只剩一个元素即为结果。
+    //后序也是一样，只是扫描方向相反，从左至右扫描即可。
     vector<int> preorderTraversal(TreeNode *root) {
         vector<int> v;
         if (!root) return v;
         stack<TreeNode *> s;
         s.push(root);
         while (!s.empty()) {
-            TreeNode* n = s.top();
-            s.pop();
+            TreeNode* n = s.top(); s.pop();
             v.push_back(n->val);
             if (n->right) { //先进右子树
                 s.push(n->right);
@@ -53,8 +55,7 @@ public:
         stack<TreeNode*> s;
         s.push(root);
         while (!s.empty()){
-            TreeNode *n = s.top();
-            s.pop();
+            TreeNode *n = s.top(); s.pop();
             v.push_back(n->val);
             if (n->left){
                 s.push(n->left);
@@ -97,11 +98,10 @@ public:
     vector<int> levelOrderTraversal(TreeNode* root) {
         vector<int> v;
         if (!root) return v;
-        std::deque<TreeNode*> q;
+        deque<TreeNode*> q;
         q.push_back(root);
         while (!q.empty()) {
-            TreeNode *n = q.front();
-            q.pop_front();
+            TreeNode *n = q.front(); q.pop_front();
             v.push_back(n->val);
             if(n->left) {
                 q.push_back(n->left);

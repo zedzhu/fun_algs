@@ -70,7 +70,7 @@ public:
             else if (
                 (A[low] <= target && target < A[mid]) || //target在左边部分，且左边部分是非rotate的
                 //左边部分是rotate的，且：target比mid还小，或者target比low还大
-                (A[mid] < A[low] && (target < A[mid] || A[low] <= target))) {
+                (A[low] > A[mid] && (target < A[mid] || A[low] <= target))) {
                 high = mid - 1;
             }
             else if (

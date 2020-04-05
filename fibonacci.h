@@ -45,7 +45,7 @@ long fib3 (int n)
     return y;
 }
 
-/* M = {{1,1},{1,0}}, {fn, fn-1} = M^(n-1)*{f1,f0}
+/* M = [[1,1],[1,0]], [fn, fn-1] = M^(n-1)*[f1,f0]
  * Time Complexity: O(n) Extra Space: O(1)
  */
 /* Helper function that multiplies 2 matricies F and M of size 2*2, and
@@ -68,8 +68,7 @@ long fib4(int n)
     return F[0][0];
 }
 
-void multiply(long F[2][2], long M[2][2])
-{
+void multiply(long F[2][2], long M[2][2]) {
     long x =  F[0][0]*M[0][0] + F[0][1]*M[1][0];
     long y =  F[0][0]*M[0][1] + F[0][1]*M[1][1];
     long z =  F[1][0]*M[0][0] + F[1][1]*M[1][0];

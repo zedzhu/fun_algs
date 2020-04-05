@@ -83,11 +83,10 @@ void multiply(long F[2][2], long M[2][2]) {
 void power(long F[2][2], long n)
 {
     if( n <= 1) return;
-    int i;
     long M[2][2] = {{1,1},{1,0}};
 
     // n - 1 times multiply the matrix to {{1,0},{0,1}}
-    for ( i = 2; i <= n; i++ )
+    for (int i = 1; i < n; i++ )
         multiply(F, M);
 }
 

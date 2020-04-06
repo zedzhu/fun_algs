@@ -217,3 +217,55 @@ int greedyLeastCoins(const vector<int>& coins, int target) {
 
     return ret;
 } 
+
+/*
+ *求集合的所有子集，其所有子集的个数为2^n个。
+ *方法1：通过一个整型数（int）与集合映射000...000 ~ 111...111（0表示有，1表示无，反之亦可），通过该整型数
+ *逐次增1可遍历获取所有的数，即获取集合的相应子集。
+ *优点：性能较好，但集合元素不能超过一定的位数（比如用int的话就是32位）。
+ */
+int getAllSubsets1(const vector<int>& input, vector<vector<int> >& output) {
+    if (input.size() > 31) return -1;
+    int max = (1<<input.size()) - 1; //111...111
+    for (int i = 0; i <= max; i++) {
+        addOneSubsetByMark(input, i, output);
+    }
+    return 0;
+}
+void addOneSubsetByMark(const vector<int>& input, int mark, vector<vector<int> >& output) {
+    vector<int> subset;
+    for (int i = 0; i < input.size(); i++) {
+        if ((1<<i) & mark == 1) { //mark从右数第i+1位为1，表示取该元素
+            subset.push_back(input[i]);
+        }
+    }
+    output.push_back(subset);
+}
+/*
+ *求集合的所有子集，其所有子集的个数为2^n个。
+ *方法1：设函数f(n)=2^n (n>=0)，有如下递推关系f(n)=2*f(n-1)=2*(2*f(n-2))=...
+ *因此求集合子集的算法可以用递归的方式实现，对于每个元素用一个映射列表marks，标记其在子集中的有无。
+ *优点：集合元素个数可以任意，但有递归性能较慢。
+ */
+int getAllSubsets2(const vector<int>& input, vector<vector<int> >& output) {
+    vector<bool> mark(input.size(), false);
+    subsetRecursive(input, mark, output, 0); 
+}
+void subsetRecursive(const vector<int>& input, vector<bool>& mark,
+    vector<vector<int> >& output, int k) {
+    if (k == input.size()) {
+        vector<int> subset;
+        for (int i = 0; i < input.size(); i++) {
+            if (mark[i]) {
+                subset.push_back(input[i]);
+            }
+        }
+        return;
+    }
+
+    mark[k] = false;
+    subsetRecursive(input, mark, output, k+1);
+    mark[k] = true;
+    subsetRecursive(input, mark, output, k+1);
+}
+

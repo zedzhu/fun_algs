@@ -2,10 +2,13 @@
 
 class Solution {
 public:
+    //耗时0ms，内存6MB
     double pow(double x, int n) {
         if (!n) return 1;
         double tmp = pow(x, n/2);
         if (n&1) {
+            //若n<0，比如n = 13, 则tmp * tmp = x^(-6) * x^(-6) = 1/(x^6 * x^6)，
+            //所以再除以一个x就变成1/(x^6 * x^6 * x)
             return n>0 ? x*tmp*tmp : tmp*tmp/x;
         } else {
             return tmp * tmp;
@@ -27,12 +30,13 @@ public:
     *        To deal with such kind case, we can use x = x*x to reduce the `n` more quickly
     *        so, if `n` is an even number, we can `x = x*x`, and `n = n>>1;`
     *            if `n` is an odd number, we can just `result *= x;`
+    * 耗时0ms，内存6MB
     */
     double pow(double x, int n) {
         bool sign = false;
-        unsigned int exp = n;
+        long exp = n;
         if (n<0) {
-            exp = -n;
+            exp = -(long)n; //不转型会报错：runtime error: negation of -2147483648 cannot be represented in type 'int'; cast to an unsigned type to negate this value to itself (solution.cpp)
             sign = true;
         }
         double result = 1.0;

@@ -268,4 +268,3 @@ void subsetRecursive(const vector<int>& input, vector<bool>& mark,
     mark[k] = true;
     subsetRecursive(input, mark, output, k+1);
 }
-

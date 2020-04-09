@@ -156,58 +156,76 @@ double fastAUC(const vector<int>& labels, const vector<float>& predicts) {
  * https://www.cnblogs.com/bestdavid/p/dpleastcoin.html
  * 有面值为1元、3元和5元的硬币若干枚，如何用最少的硬币凑够11元？
  * 贪心算法不是对所有问题都能得到整体最优解，必须满足条件：后一个的权值（这里就是纸币面值）是前一个的2倍或以上才可以使用，
- * 比如，1，7，9，10，这里10不到9的两倍，贪心法凑18元就不错了。
+ * 比如，1，7，9，10，这里10不到9的两倍，贪心法凑18元就错了。
  * 我怎么觉得这个条件也不成立，比如：1,5,11，满足2倍以上关系但凑15元就不行。
  * 但是这个1、3、5我觉得可以用贪心法，不然反例？
- * d(i)=j来表示凑够i元最少需要j个硬币,
- * d(i) = min{ d(i - Vj) + 1} ,i >= Vj。
+ * dp(i)=j来表示凑够i元最少需要j个硬币,
+ * dp(i) = min{dp(i-coins[j])+1, i=1,2,...,target and j=0,1,2,...,n and i>=coins[j]}
  * 比如：
- * d(0) = 0
- * d(1) = min{d(0)+1} = 1
- * d(2) = min{d(2-1)+1} = 2
- * d(3) = min{d(3-1)+1,d(3-3)+1} = min{2,1} = 1
- * d(4) = min{d(4-1)+1,d(4-3)+1} = min{2,2} = 2
- * d(5) = min{d(5-1)+1,d(5-3)+1,d(5-5)+1} = min{3,3,1} = 1
+ * dp(0) = 0
+ * dp(1) = min{d(0)+1} = 1
+ * dp(2) = min{d(2-1)+1} = 2
+ * dp(3) = min{d(3-1)+1,d(3-3)+1} = min{2,1} = 1
+ * dp(4) = min{d(4-1)+1,d(4-3)+1} = min{2,2} = 2
+ * dp(5) = min{d(5-1)+1,d(5-3)+1,d(5-5)+1} = min{3,3,1} = 1
  */
 //coins按面值从小到大排序
 int dpLeastCoins(const vector<int>& coins, int target) {
-    //初始化动态规划数组，初始值设置为最大
-    vector<int> d(target+1, 0);
+    //如果target为0，leetcode测试case居然要求返回0而不是-1.
+    if (target <= 0) return 0;
+    //初始化动态规划数组，初始值设置为0
+    vector<int> dp(target+1, 0);
     //用于检测零钱是否存在解（如果不含有1元的硬币）
-    vector<int> c(target+1, 0);
+    vector<int> usedCoins(target+1, 0);
     for (int i = 1; i <= target; i++) {
-        int min = i; //最多用i个1元硬币，但是如果没有1元硬币呢？这就是c的作用。
+        int min = i + 1; //设置上边界
         for (int j = 0; j < coins.size(); j++) {
             //目标金额i比当前硬币面额还小，则说明后面的硬币都不能满足要求了，提前退出循环。
             if (i < coins[j]) break;
-            if (d[i-coins[j]] + 1 < min &&
+            if (dp[i-coins[j]] + 1 < min &&
                 //以下判断检测上一个是否有效，无效则跳过。如果含有一元硬币，这个判断就不需要。
-                (i == coins[j] || c[i - coins[j]] != 0)) {
-                min = d[i-coins[j]] + 1;
-                c[i] = coins[j];
+                (i == coins[j] || usedCoins[i - coins[j]] != 0)) {
+                min = dp[i-coins[j]] + 1;
+                usedCoins[i] = coins[j];
             }
         }
-        d[i] = min; 
+        dp[i] = min; 
     }
     //下面是找到具体用了哪些面值的硬币
     int money = target;
-    if (c[money] != 0) {
+    if (usedCoins[money] != 0) {
         while (money) {
             //cout << c[money] << ",";
-            money -= c[money];
+            money -= usedCoins[money];
         }
     }
 
-    if (c[target] > 0) //有解
-        return d[target];
+    if (usedCoins[target] > 0) //有解
+        return dp[target];
     else  //无解
         return -1; 
 }
 
+//coins没有按面值排序
+int dpLeastCoins2(const vector<int>& coins, int target) {
+    const int MAX = target + 1;
+    vector<int> dp(target+1, MAX);
+    dp[0] = 0; //设置初始值
+    for (int i = 1; i <= target; i++) {
+        for (int j = 0; j < coins.size(); j++) {
+            if (i <= coins[j]) {
+                dp[i] = std::min(dp[i], dp[i-coins[j]]+1);
+            }
+        }
+    }
+
+    return dp[target] == MAX ? -1 : dp[target];
+}
+
 //coins按面值从小到大排序，有问题的贪心法，只对对于特殊的硬币面值组合可以。
-int greedyLeastCoins(const vector<int>& coins, int target) {
+int greedyLeastCoins(vector<int>& coins, int target) {
+    std::sort(coins.begin(), coins.end());
     int ret = 0;
-    int left = target;
     for (size_t i = coins.size()-1; i >= 0; i--) {
         int k = target/coins[i];
         ret += k;

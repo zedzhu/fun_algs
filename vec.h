@@ -181,7 +181,7 @@ int dpLeastCoins(const vector<int>& coins, int target) {
         int min = i + 1; //设置上边界
         for (int j = 0; j < coins.size(); j++) {
             //目标金额i比当前硬币面额还小，则说明后面的硬币都不能满足要求了，提前退出循环。
-            if (i < coins[j]) break;
+            if (i < coins[j]) break; //如果coins不是从小到大排序，则改为continue。
             if (dp[i-coins[j]] + 1 < min &&
                 //以下判断检测上一个是否有效，无效则跳过。如果含有一元硬币，这个判断就不需要。
                 (i == coins[j] || usedCoins[i - coins[j]] != 0)) {

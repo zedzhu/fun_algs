@@ -205,7 +205,6 @@ int dpLeastCoins(const vector<int>& coins, int target) {
     else  //无解
         return -1; 
 }
-
 //coins没有按面值排序
 int dpLeastCoins2(const vector<int>& coins, int target) {
     const int MAX = target + 1;
@@ -221,7 +220,6 @@ int dpLeastCoins2(const vector<int>& coins, int target) {
 
     return dp[target] == MAX ? -1 : dp[target];
 }
-
 //coins按面值从小到大排序，有问题的贪心法，只对对于特殊的硬币面值组合可以。
 int greedyLeastCoins(vector<int>& coins, int target) {
     std::sort(coins.begin(), coins.end());
@@ -235,6 +233,22 @@ int greedyLeastCoins(vector<int>& coins, int target) {
 
     return ret;
 } 
+//还是找零问题，这回求所有可能的组合数。
+int change_dp(int amount, vector<int>& coins) {
+    vector<int> dp(amount+1, 0);
+    dp[0] = 1;
+    //下面2个for循环不能调换顺序。
+    for (int i=0; i<coins.size(); i++) {
+        for(int n=1; n<=amount; n++) {
+            if (n >= coins[i]) {
+                dp[n] += dp[n-coins[i]];
+            }
+        }
+    }
+
+    return dp[amount];
+}
+
 
 /*
  *求集合的所有子集，其所有子集的个数为2^n个。

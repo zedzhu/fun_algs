@@ -86,12 +86,12 @@ TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
 
 TreeNode* lowestCommonAncestorOfBST(TreeNode* root, TreeNode* p, TreeNode* q) {
     while (root) {
-        if (p->val > root->val && q->val > root->val) {
-            //如果p、q都大于root，则在其右子树中查找
-            root = root->right;
-        } else if (p->val < root->val && q->val < root->val) {
+        if (p->val < root->val && q->val < root->val) {
             //如果p、q都小于root，则在其左子树中查找
             root = root->left;
+        } else if (p->val > root->val && q->val > root->val) {
+            //如果p、q都大于root，则在其右子树中查找
+            root = root->right;
         } else {
             //否则p、q分别位于左右子树中，返回root即可。
             return root;

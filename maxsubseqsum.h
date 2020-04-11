@@ -38,7 +38,7 @@ int MaxSubsequenceSum2(const int A[],int N)
   
 //Algorithm 4:时间效率为O(n)  
 //dp思想
-int MaxSubsequenceSum(const int A[], int N) {
+int MaxSubArraySum(const int A[], int N) {
     int thisSum = 0, maxSum = A[0];  
     for (int j = 0; j < N; j++) {  
         thisSum += A[j];

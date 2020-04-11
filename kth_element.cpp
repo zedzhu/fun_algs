@@ -58,11 +58,11 @@ public:
     }
 
     //O(N * logK)
-    int findKthLargest_qsort(vector<int>& nums, int k) {
+    int findKthLargest(vector<int>& nums, int k) {
         int left = 0, right = nums.size() - 1;
         while (true) {
             int pos = partition(nums, left, right);
-            if (pos == k - 1){ 
+            if (pos == k - 1) { 
                 return nums[pos];
             }
             if (pos > k - 1) {
@@ -72,11 +72,7 @@ public:
             }  
         }
     }
-    
-    
-    int findKthLargest(vector<int>& nums, int k) {
-        return findKthLargest_qsort(nums, k);
-    }
+
 };
 
 int findMedian(const vector<int>& vec){

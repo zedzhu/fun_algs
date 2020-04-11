@@ -43,7 +43,7 @@ void reverse(char* begin, char* end) {
 }
 //采用基于字典序的next permutation下一个排列算法
 bool nextPerm(char* s, int len) {
-    if (len <= 1) return;
+    if (len <= 1) return false;
     for (int i = len - 1; i > 0; i--) {
         if (s[i-1] < s[i]) {
             //1. 找到排列中最后（最右）一个升序的首位位置i

@@ -18,7 +18,7 @@ int minDistance(string word1, string word2) {
     }
     for (int i = 1; i <= word1.size(); ++i) {
         for (int j = 1; j <= word2.size(); ++j) {
-            if(word1[i-1] == word2[j-1]) {
+            if (word1[i-1] == word2[j-1]) {
                 dists[i][j] = dists[i-1][j-1];
             } else {
                 //Substitution of word1[i] for word2[j]: dists[i-1][j-1] + 1

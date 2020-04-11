@@ -7,12 +7,10 @@ struct ListNode {
 };
 
 //插表头法
-ListNode* reverseLinklist(ListNode* pHead)
-{
+ListNode* reverseLinklist(ListNode* pHead) {
     ListNode* curr = pHead;
     ListNode* prev = NULL;
-    while (curr)
-    {
+    while (curr) {
         ListNode* tmp = curr->next;
         curr->next = prev; //Insert to head
         prev = curr;
@@ -22,8 +20,7 @@ ListNode* reverseLinklist(ListNode* pHead)
     return prev;
 }
 
-ListNode *reverseRecursive(ListNode *head)
-{
+ListNode *reverseRecursive(ListNode *head) {
     if (!head || !head->next)
         return head;
     ListNode* p = reverseRecursive(head->next);
@@ -76,4 +73,18 @@ ListNode *detectCycle(ListNode *head) {
     }
 
     return NULL;
+}
+
+//两个链表的第一个公共结点
+//p1与p2同时前进，p1到了末尾就指向head2，p2到了末尾就指向head1，避免了先计算链表长度。
+//Runtime: 48 ms, faster than 83.81% of C++, Memory Usage: 14.7 MB, less than 100.00% of C++
+ListNode* getIntersectionNode(ListNode *head1, ListNode *head2) {
+    if (!head1 || !head2) return NULL;
+    ListNode* p1 = head1;
+    ListNode* p2 = head2;
+    while (p1 != p2) {
+        p1 = p1 ? p1->next : head2;
+        p2 = p2 ? p2->next : head1;
+    }
+    return p1;
 }

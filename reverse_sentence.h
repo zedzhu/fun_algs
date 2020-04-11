@@ -110,9 +110,14 @@ char* reverse_sentence_remove_spaces(char* s) {
     return s;
 }
 
-//XY => YX
-char * left_rotate(char* s, int m) {
-    if (s) {
-        
-    }
+//XY => YX, len(Y)=m
+//根据(X^TY^T)^T = YX得到3步反转法：1）反转X；2）反转Y；3）整体反转
+//Time:O(n), Space:O(1)
+char* left_rotate(char* s, int m) {
+    int len;
+    if (!s || m <= 0 || (len=strlen(s)) < m) return s;
+    reverse(s, s+len-m-1);
+    reverse(s+len-m, s+len-1);
+    reverse(s, s+len-1);
+    return s;
 }

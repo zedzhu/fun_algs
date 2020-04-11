@@ -147,6 +147,7 @@ class LruHashCache
 {
 public:
     typedef std::pair<key_t, value_t> key_value_pair_t;
+    //因为使用了::,为了避免与这也可能是一个变量发生歧义，所以用typename强调这是一个类型而不是变量。
     typedef typename std::list<key_value_pair_t>::iterator list_iterator_t;
     typedef HashFun hash_func;
     typedef hash_map<key_t, list_iterator_t, hash_func> LruDataMap;

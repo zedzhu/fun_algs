@@ -27,10 +27,10 @@ int lcs_dp( char *X, char *Y, int m, int n ) {
       that L[i][j] contains length of LCS of X[0..i-1] and Y[0..j-1] */
    for (i=1; i<=m; i++) {
      for (j = 1; j <= n; j++) {
-       if (X[i - 1] == Y[j - 1])
-         L[i][j] = L[i - 1][j - 1] + 1;
+       if (X[i-1] == Y[j-1])
+         L[i][j] = L[i-1][j-1] + 1;
        else
-         L[i][j] = std::max(L[i - 1][j], L[i][j - 1]);
+         L[i][j] = std::max(L[i-1][j], L[i][j-1]);
      }
    }
     

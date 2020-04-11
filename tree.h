@@ -169,3 +169,38 @@ TreeNode* createBST2(ListNode*& head, int low, int high) {
     node->right = createBST2(head, mid+1, high);
     return node;
 }
+
+//8~12ms
+bool isBalancedFast(TreeNode* root) {
+    int depth = 0;
+    return isBalanced(root, depth);
+}
+bool isBalanced(TreeNode* root, int& depth) {
+    if (!root) {
+        depth = 0;
+        return true;
+    }
+    int ldepth, rdepth;
+    bool isLeft = isBalanced(root->left, ldepth);
+    bool isRight = isBalanced(root->right, rdepth);
+    depth = std::max(ldepth, rdepth) + 1;
+    return isLeft && isRight && std::abs(ldepth-rdepth)<=1;
+}
+
+//12~16ms
+bool isBalancedSlow(TreeNode* root) {
+    if (!root) return true;
+    int left = treeDepth(root->left);
+    int right = treeDepth(root->right);
+
+    if (std::abs(left-right) > 1)
+        return false;
+
+    return isBalancedSlow(root->left) && isBalancedSlow(root->right);
+}
+int treeDepth(TreeNode* root) {
+    if (!root) return 0;
+    int left = treeDepth(root->left);
+    int right = treeDepth(root->right);
+    return std::max(left, right) + 1;
+}

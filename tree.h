@@ -1,7 +1,14 @@
 #include <cstdio>
 #include <algorithm>
+#include <vector>
 
+using namespace std;
 
+struct ListNode {
+    int val;
+    ListNode* next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
 struct TreeNode {
     int val;
     TreeNode *left;
@@ -9,7 +16,7 @@ struct TreeNode {
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
- /*
+/*
 Diameter of Binary Tree
 Given a binary tree, you need to compute the length of the diameter of the tree. 
 The diameter of a binary tree is the length of the longest path between any two nodes in a tree. 
@@ -92,4 +99,71 @@ TreeNode* lowestCommonAncestorOfBST(TreeNode* root, TreeNode* p, TreeNode* q) {
     }
 
     return NULL;
+}
+
+//
+// if a node has 0 coin, which means one move from its parent.
+//               1 coin, which means zero move from its parent.
+//               N coins, which means N-1 moves to its parent.
+//
+// So, we can simply know, the movement = coins -1.
+// - negative number means the the coins needs be moved in.
+// - positive number means the the coins nees be moved out.
+//
+// A node needs to consider the movement requests from both its left side and right side.
+// and need to calculate the coins after left and right movement.
+//
+// So, the node coins  = my conins - the coins move out + the coins move in.
+//
+// Then we can have to code as below.
+//
+int dfs(TreeNode* root, int& result) {
+    if (root == NULL) return 0;
+
+    int left_move = dfs(root->left, result);
+    int right_move = dfs(root->right, result);
+    //result是移动步数，所以要取绝对值
+    result += (abs(left_move) + abs(right_move));
+
+    // the coin after movement: coins = root->val +left_move + right_move
+    // the movement needs:  movement = coins - 1
+    //coins-1是本题的核心
+    return root->val + left_move + right_move - 1;
+}
+//问题描述：https://leetcode-cn.com/problems/distribute-coins-in-binary-tree/
+//大致意思是N个节点的二叉树，每个节点上有若干个金币（也可能0个），总共有N个金币，问一共要经过多少次移动使得每个节点上只有1个金币
+int distributeCoins(TreeNode* root) {
+    int result = 0;
+    dfs(root, result);
+    return result;
+}
+
+TreeNode* sortedArrayToBST(vector<int>& arr) {
+    return createBST(arr, 0, arr.size()-1);
+}
+TreeNode* createBST(vector<int>& arr, int low, int high) {
+    if (low > high) return NULL;
+    int mid = (low + high) >> 1;
+    TreeNode* node = new TreeNode(arr[mid]);
+    node->left = createBST(arr, low, mid - 1);
+    node->right = createBST(arr, mid + 1, high);
+    return node;
+}
+
+TreeNode* sortedListToBST(ListNode* head) {
+    int len = 0;
+    for (ListNode* p = head; p; p=p->next) len++;
+    return createBST2(head, 0, len-1);
+}
+TreeNode* createBST2(ListNode*& head, int low, int high) {
+    if (low > high || !head) return NULL;
+    int mid = (low + high) >> 1;
+    TreeNode* left = createBST2(head, low, mid-1);
+    TreeNode* node = new TreeNode(head->val);
+    node->left = left;
+
+    head = head->next;
+
+    node->right = createBST2(head, mid+1, high);
+    return node;
 }

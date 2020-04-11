@@ -85,6 +85,9 @@ ListNode* getIntersectionNode(ListNode *head1, ListNode *head2) {
     while (p1 != p2) {
         p1 = p1 ? p1->next : head2;
         p2 = p2 ? p2->next : head1;
+        //下面的代码Wrong:因为如果没有相交点，会死循环，因为p1=NULL && p2=NULL无法执行p1!=p2的终止条件判断
+        //p1 = p1->next; if (!p1) p1 = head2;
+        //p2 = p2->next; if (!p2) p2 = head2;
     }
     return p1;
 }

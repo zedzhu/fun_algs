@@ -4,6 +4,8 @@
 #include <set>
 #include <iostream>
 #include <climits>
+#include <stack>
+#include <set>
 
 using namespace std;
 
@@ -299,4 +301,114 @@ void subsetRecursive(const vector<int>& input, vector<bool>& mark,
     subsetRecursive(input, mark, output, k+1);
     mark[k] = true;
     subsetRecursive(input, mark, output, k+1);
+}
+
+//https://leetcode.com/problems/validate-stack-sequences/solution/
+//输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是
+// 否为该栈的弹出顺序。假设压入栈的所有数字均不相等。
+bool isPopOrder(vector<int>& pushed, vector<int>& popped) {
+    stack<int> s;
+    int k = 0;
+    for (auto x : pushed) {
+        s.push(x);
+        //如果栈顶元素等于当前弹出序列元素，则必须弹出
+        while (!s.empty() && k < popped.size() && s.top()==popped[k]) {
+            s.pop();
+            k++;
+        }
+    }
+
+    return k == popped.size();
+}
+
+//用递归颠倒一个栈。例如输入栈{1, 2, 3, 4, 5}，1在栈顶。颠倒之后的栈为{5, 4, 3, 2, 1}，5处在栈顶。
+void reverseStack(stack<int>& stk) {
+    if (!stk.empty()) {
+        int top = stk.top();
+        stk.pop();
+        //颠倒栈中剩余的元素
+        reverseStack(stk);
+        //把top加入到stk的底部。
+        //然可以开辟一个数组来做，但这没有必要。由于我们可以用递归来做这件事情，而递归本身就是一个栈结构。
+        addToBottom(stk, top); 
+    }
+}
+void addToBottom(stack<int>& stk, int v) {
+    //当栈为空的时候，push元素e进栈，此时它就位于栈的底部了。
+    if (stk.empty())
+        stk.push(v);
+    else {
+        int top = stk.top();
+        stk.pop();
+        addToBottom(stk, v);
+        stk.push(top);
+    }
+}
+
+/*https://leetcode.com/problems/cheapest-flights-within-k-stops/
+ *The number of nodes n will be in range [1, 100], with nodes labeled from 0 to n - 1.
+ *The size of flights will be in range [0, n * (n - 1) / 2].
+ *The format of each flight will be (src, dst, price).
+ *The price of each flight will be in the range [1, 10000].
+ *k is in the range of [0, n - 1].
+ *There will not be any duplicated flights or self cycles.
+ */
+//解法一：深度优先搜索, 350ms, 9.3 MB
+int findCheapestPrice(int n, vector<vector<int> >& flights, int src, int dst, int K) {
+    vector<vector<int> > graph(n, vector<int>(n, 0));
+    for (auto flight: flights) {
+        graph[flight[0]][flight[1]] = flight[2];
+    }
+
+    vector<bool> visited(n, false);
+    const int MAX_COST = 1000000;
+    int minCost = MAX_COST;
+    findCheapestPriceDFS(src, dst, K, graph, visited, minCost, 0);
+    return minCost == MAX_COST ? -1 : minCost;
+}
+void findCheapestPriceDFS(int src, int dst, int K, 
+    vector<vector<int> >& graph, vector<bool>& visited, 
+    int& minCost, int cost) {
+    if (src == dst) 
+        minCost = std::min(minCost, cost);
+    //利用转机次数和票价进行剪枝
+    if (K >= 0 && cost < minCost) {
+        for (size_t i = 0; i < graph.size(); i++) {
+            if (graph[src][i] != 0 && !visited[i]) {
+                visited[i] = true;
+                findCheapestPriceDFS(i, dst, K-1, graph, visited, minCost, cost+graph[src][i]);
+                visited[i] = false;
+            }
+        }
+    }
+}
+//解法二：广度优先搜索, 16ms, 9.6MB
+int findCheapestPriceBFS(int n, vector<vector<int> >& flights, int src, int dst, int K) {
+    vector<vector<int> > graph(n, vector<int>(n, 0));
+    for (auto flight: flights) {
+        graph[flight[0]][flight[1]] = flight[2];
+    }
+
+    const int MAX_COST = 1000000;
+    vector<int> costs(n, MAX_COST); //costs[i]代表从src到i的最小成本
+    set<int> set1;
+    set1.insert(src);
+    costs[src] = 0;
+    while (!set1.empty() && K >= 0) {
+        set<int> set2;
+        for (auto from: set1) {
+            for (int i = 0; i < n; i++) {
+                //如果中转次数用完而目标还不是最终目标，剪枝
+                if (K == 0 && i != dst) continue;
+                if (graph[from][i]>0 && costs[from]+graph[from][i]<costs[i]) {
+                    costs[i] = costs[from] + graph[from][i];
+                    set2.insert(i);
+                }
+            }
+        }
+        set1 = set2;
+        K--;
+    }
+
+    return costs[dst] == MAX_COST ? -1 : costs[dst];
 }

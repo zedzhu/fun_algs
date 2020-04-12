@@ -356,7 +356,7 @@ void addToBottom(stack<int>& stk, int v) {
 //解法一：深度优先搜索, 350ms, 9.3 MB
 int findCheapestPrice(int n, vector<vector<int> >& flights, int src, int dst, int K) {
     vector<vector<int> > graph(n, vector<int>(n, 0));
-    for (auto flight: flights) {
+    for (auto &flight: flights) {
         graph[flight[0]][flight[1]] = flight[2];
     }
 
@@ -385,7 +385,7 @@ void findCheapestPriceDFS(int src, int dst, int K,
 //解法二：广度优先搜索, 16ms, 9.6MB
 int findCheapestPriceBFS(int n, vector<vector<int> >& flights, int src, int dst, int K) {
     vector<vector<int> > graph(n, vector<int>(n, 0));
-    for (auto flight: flights) {
+    for (auto &flight: flights) {
         graph[flight[0]][flight[1]] = flight[2];
     }
 
@@ -406,9 +406,61 @@ int findCheapestPriceBFS(int n, vector<vector<int> >& flights, int src, int dst,
                 }
             }
         }
-        set1 = set2;
+        set1.swap(set2);
         K--;
     }
 
     return costs[dst] == MAX_COST ? -1 : costs[dst];
+}
+//解法三：dp, 40~60ms, 8.8MB
+//dp(i,c):从src出发中转i次到达城市c的最低成本，dp(K,dst)就是我们要求的。
+//dp(i,c)=min { dp(i-1,c), dp(i-1,d)+flight(d,c) for d in {d s.t. flight(d,c)>0} }
+int findCheapestPriceDP(int n, vector<vector<int> >& flights, int src, int dst, int K) {
+    const int MAX_COST = 1000000;
+    vector<vector<int> > dp(K+1, vector<int>(n, MAX_COST));
+    //不管经过多少次转机，到自身成本都是0
+    for (int i = 0; i <= K; i++) dp[i][src] = 0;
+    //以下初始化从src出发直达的（不转机）成本
+    for (auto &flight : flights) {
+        if (flight[0] == src)
+            dp[0][flight[1]] = flight[2];
+    }
+    for (int i = 1; i <= K; i++) {
+        for (auto &flight : flights) {
+            //这个if判断说明上一步从src到flight[0]可达，否则这条线无意义
+            if (dp[i-1][flight[0]] < MAX_COST) {
+                dp[i][flight[1]] = std::min(dp[i][flight[1]],
+                                            dp[i-1][flight[0]] + flight[2]);
+                //下面语句不要也行
+                dp[i][flight[1]] = std::min(dp[i][flight[1]],
+                                            dp[i-1][flight[1]]);
+            }
+        }
+    }
+
+    return dp[K][dst] == MAX_COST ? -1 : dp[K][dst];
+}
+//解法三：dp，比上个优化一点空间使用, 30~40ms, 8.6MB
+int findCheapestPriceDPImproved(int n, vector<vector<int> >& flights, int src, int dst, int K) {
+    const int MAX_COST = 1000000;
+    //在求解dp(i,c)的时候我们只需要用到第i-1行的值，因此我们可以优化空间效率，
+    //只需要保留其中的两行（第i-1行和第i行）就可以了。 
+    vector<vector<int> > dp(2, vector<int>(n, MAX_COST));
+    dp[0][src] = 0;
+    int curr = 1;
+    while (K >= 0) {
+        int prev = 1 - curr;
+        //如果不用引用，性能将会变得很差：125ms, 24.2MB
+        for (auto &flight : flights) {
+            if (dp[prev][flight[0]] < MAX_COST) {
+                dp[curr][flight[1]] = std::min(dp[curr][flight[1]],
+                                               dp[prev][flight[0]] + flight[2]);
+            }
+        }
+        dp[prev] = dp[curr];
+        curr = prev;
+        K--;
+    }
+
+    return dp[1 - curr][dst] == MAX_COST ? -1 : dp[1 - curr][dst];
 }

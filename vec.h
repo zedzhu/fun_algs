@@ -464,3 +464,64 @@ int findCheapestPriceDPImproved(int n, vector<vector<int> >& flights, int src, i
 
     return dp[1 - curr][dst] == MAX_COST ? -1 : dp[1 - curr][dst];
 }
+
+/**
+ * 输入一个不含重复元素的数组，计算该数组全排列。
+ */
+void calcPermRecursive(vector<int>& nums, int from, int to, 
+    vector<vector<int> >& result) {
+    if (from == to) {
+        //找到一个排列
+        result.push_back(nums);
+        return;
+    }
+    for (int i = from; i <= to; i++) {
+        std::swap(nums[i], nums[from]);
+        calcPermRecursive(nums, from+1, to, result);
+        std::swap(nums[i], nums[from]);
+    }
+}
+vector<vector<int> > permute(vector<int>& nums) {
+    vector<vector<int> > result;
+    if (nums.empty()) return result;
+    if (nums.size() == 1) {
+        result.push_back(nums);
+        return result;
+    }
+    calcPermRecursive(nums, 0, nums.size()-1, result);
+    return result;
+}
+
+/**
+ * 输入一个含有重复元素的数组，计算该数组全排列。
+ */
+bool canSwap(vector<int>& nums, int from, int i) {
+    for (int k = from; k < i; k++)
+        if (nums[k] == nums[i]) return false;
+    return true;
+}
+void calcPermRecursive2(vector<int>& nums, int from, int to, 
+    vector<vector<int> >& result) {
+    if (from == to) {
+        //找到一个排列
+        result.push_back(nums);
+        return;
+    }
+    for (int i = from; i <= to; i++) {
+        if (canSwap(nums, from , i)) {
+            std::swap(nums[i], nums[from]);
+            calcPermRecursive2(nums, from+1, to, result);
+            std::swap(nums[i], nums[from]);
+        }
+    }
+}
+vector<vector<int> > permute2(vector<int>& nums) {
+    vector<vector<int> > result;
+    if (nums.empty()) return result;
+    if (nums.size() == 1) {
+        result.push_back(nums);
+        return result;
+    }
+    calcPermRecursive2(nums, 0, nums.size()-1, result);
+    return result;
+}

@@ -12,7 +12,6 @@ using namespace std;
  * 输入一个字符串，输出出该字符串中字符的所有排列。
  */
 void calcPermRecursive(char* s, int from, int to, vector<string>& out) {
-    if (to <= 1) return;
     if (from == to) {
         //找到一个排列
         out.push_back(s);
@@ -25,6 +24,11 @@ void calcPermRecursive(char* s, int from, int to, vector<string>& out) {
     }
 }
 void calcAllPermutation(const string& input, vector<string>& out) {
+    if (input.empty()) return;
+    if (input.size() == 1) {
+        out.push_back(input);
+        return;
+    }
     char* chArr = new char[input.size()+1];
     strcpy(chArr, input.c_str());
     //Or: strcpy(chArr, &input[0]);
@@ -65,6 +69,11 @@ bool nextPerm(char* s, int len) {
     }
 }
 void calcAllPermutation2(const string& input, vector<string>& out) {
+    if (input.empty()) return;
+    if (input.size() == 1) {
+        out.push_back(input);
+        return;
+    }
     char* chArr = new char[input.size()+1];
     strcpy(chArr, input.c_str());
     std::sort(chArr, chArr+input.size());

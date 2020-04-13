@@ -476,8 +476,13 @@ void calcPermRecursive(vector<int>& nums, int from, int to,
         return;
     }
     for (int i = from; i <= to; i++) {
+        //每一位都与第一位发生交换，i===from时，也就是自己和自己交换，并不会发生值的变化，
+        //所以我们可以直接这样处理，不需要让i从from+1开始，当然也可以从i=from+1开始循环。
         std::swap(nums[i], nums[from]);
-        calcPermRecursive(nums, from+1, to, result);
+        calcPermRecursive(nums, from+1, to, result); // 固定位置后移
+        // 这一步的操作是为了在循环体中的第一步，我们对arr,进行了位置交换，对数组产生了影响。
+        //arr的顺序发生了变化，如果我们要假定第一位的所有可能性的话，那么，
+        //就必须是在建立在这些序列的初始状态一致的情况下,所以每次交换后，要还原，确保初始状态一致。
         std::swap(nums[i], nums[from]);
     }
 }
@@ -494,6 +499,14 @@ vector<vector<int> > permute(vector<int>& nums) {
 
 /**
  * 输入一个含有重复元素的数组，计算该数组全排列。
+ https://juejin.im/post/5d496c4af265da03c721892a
+               a                 |           b      |           c
+           /   |   \             |       /     \    |        /    \
+            b   c    a           |       a      c   |       a      b
+          /\    /\   /\          |      /\      |   |     /  \      |
+         c  a   a  b  b  c       |     a  c     a   |     a   b     a
+        |  |   |  |  |  |        |     |  |     |   |     |   |     |
+         a  c   b  a  c  b       |     c  a     a   |     b   a     a
  */
 bool canSwap(vector<int>& nums, int from, int i) {
     for (int k = from; k < i; k++)
@@ -509,6 +522,8 @@ void calcPermRecursive2(vector<int>& nums, int from, int to,
     }
     for (int i = from; i <= to; i++) {
         if (canSwap(nums, from , i)) {
+            //这一步的操作是将元素i作为打头元素，也就是以元素i作为开头，在此之前，
+            //我们需要对i是否打过头进行判断。也就是看看再[from,i-1]之间看看arr[i]是否出现过。
             std::swap(nums[i], nums[from]);
             calcPermRecursive2(nums, from+1, to, result);
             std::swap(nums[i], nums[from]);

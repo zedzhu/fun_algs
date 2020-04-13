@@ -10,6 +10,18 @@ using namespace std;
 
 /**
  * 输入一个字符串，输出出该字符串中字符的所有排列。
+                    a
+             /     |     \
+           b       c       d
+          / \      /\      / \
+         /   \    /  \     /  \ 
+         c   d    b   d    b   c
+        |    |   |   |    |    |
+        d    c   d   b    c    b
+        |    |   |   |    |    |
+    ----------------------------------
+    | abcd  acdc acbd acdb adbc  adcb|
+    ----------------------------------
  */
 void calcPermRecursive(char* s, int from, int to, vector<string>& out) {
     if (from == to) {
